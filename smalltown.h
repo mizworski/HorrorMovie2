@@ -1,0 +1,10 @@
+#ifndef HORRORMOVIE2_SMALLTOWN_H
+#define HORRORMOVIE2_SMALLTOWN_H
+
+
+class Smalltown {
+
+};
+
+
+#endif //HORRORMOVIE2_SMALLTOWN_H

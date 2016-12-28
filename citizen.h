@@ -1,0 +1,10 @@
+#ifndef HORRORMOVIE2_CITIZEN_H
+#define HORRORMOVIE2_CITIZEN_H
+
+
+class Citizen {
+
+};
+
+
+#endif //HORRORMOVIE2_CITIZEN_H

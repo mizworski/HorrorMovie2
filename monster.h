@@ -1,0 +1,10 @@
+#ifndef HORRORMOVIE2_MONSTER_H
+#define HORRORMOVIE2_MONSTER_H
+
+
+class Monster {
+
+};
+
+
+#endif //HORRORMOVIE2_MONSTER_H
