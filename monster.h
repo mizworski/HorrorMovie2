@@ -18,7 +18,7 @@ public:
     void takeDamage(AttackPower damage);
 
 private:
-    HealthPoints health_; //todo change type
+    HealthPoints health_; //todo change type.
     AttackPower attackPower_;
 };
 
@@ -42,9 +42,10 @@ public:
     GroupOfMOnsters(const std::vector<Monster> &monsters);
 
     // todo do we need 2 constructors for lvalues and rvalues?
+    // no. wrote more in monster.cc
     GroupOfMOnsters(std::vector<Monster> &&monsters);
 
-    //todo need constructor(s) for std::initializer_list
+    GroupOfMOnsters(std::initializer_list<Monster> monsters);
 
     HealthPoints getHealth();
 

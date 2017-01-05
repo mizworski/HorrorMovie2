@@ -42,6 +42,8 @@ GroupOfMOnsters::GroupOfMOnsters(const std::vector<Monster> &monsters) : monster
 }
 
 // todo do we need 2 constructors for lvalues and rvalues?
+// I think not, rvalue is a way of writing a function so we move references rather than copying. At least in my understanding
+// we don't even have to do rvalue, it's wasn't on the whiteboard. I can send you the photo
 GroupOfMOnsters::GroupOfMOnsters(std::vector<Monster> &&monsters) : monsters_(monsters), health_(0), attackPower_(0) {
     for (auto &monster : monsters_) {
         HealthPoints health = monster.getHealth();
@@ -55,6 +57,14 @@ GroupOfMOnsters::GroupOfMOnsters(std::vector<Monster> &&monsters) : monsters_(mo
         }
     }
 }
+
+std::vector<Monster> listToVector(std::initializer_list<Monster> monsters) {
+    std::vector<Monster> monsterVector(monsters.size());
+    std::copy(monsters.begin(), monsters.end(), monsterVector.begin());
+    return monsterVector;
+}
+
+GroupOfMOnsters::GroupOfMOnsters(std::initializer_list<Monster> monsters) : GroupOfMOnsters(listToVector(monsters)){}
 
 HealthPoints GroupOfMOnsters::getHealth() {
     return health_;
@@ -79,6 +89,8 @@ void GroupOfMOnsters::takeDamage(AttackPower damage) {
         }
     }
 }
+
+
 
 Zombie createZombie(HealthPoints health, AttackPower attackPower) {
     Zombie zombie(health, attackPower);
