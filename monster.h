@@ -39,12 +39,8 @@ public :
 
 class GroupOfMOnsters {
 public:
-    GroupOfMOnsters(const std::vector<Monster> &monsters);
-
-    // todo do we need 2 constructors for lvalues and rvalues?
-    // no. wrote more in monster.cc
-    GroupOfMOnsters(std::vector<Monster> &&monsters);
-
+    GroupOfMOnsters();
+    GroupOfMOnsters(std::vector<Monster> monsters);
     GroupOfMOnsters(std::initializer_list<Monster> monsters);
 
     HealthPoints getHealth();
@@ -64,5 +60,9 @@ Zombie createZombie(HealthPoints health, AttackPower attackPower);
 Vampire createVampire(HealthPoints health, AttackPower attackPower);
 
 Mummy createMummy(HealthPoints health, AttackPower attackPower);
+
+GroupOfMOnsters createGroupOfMonsters(std::vector<Monster> monsters);
+
+GroupOfMOnsters createGroupOfMonsters(std::initializer_list<Monster> monsters);
 
 #endif //HORRORMOVIE2_MONSTER_H
