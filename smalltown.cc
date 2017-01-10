@@ -1,21 +1,16 @@
 #include "smalltown.h"
-#include <vector>
-#include <functional>
 
 
 SmallTown::SmallTown(Time t0, Time t1, GroupOfMonsters &groupOfMonsters,
                      std::vector<std::shared_ptr<Citizen>> &citizens) :
-        actTime_(t0), maxTime_(t1), citizens_(citizens), monsters_(groupOfMonsters) {}
+        actTime_(t0), maxTime_(t1), monsters_(groupOfMonsters), citizens_(citizens) {}
 
 void SmallTown::tick(Time timeStep) {
     if (!gameHasEnded()) {
         if (isAttackingTime()) {
-            AttackPower citizensAttackPower = 0;
             for (auto &citizen : citizens_) {
-                auto pt = citizen.get();
-                citizen.get()->fightAgainstMonsters(monsters_);
+                citizen->fightAgainstMonster(std::make_shared<GroupOfMonsters>(monsters_));
             }
-            monsters_.takeDamage(citizensAttackPower);
         }
 
         actTime_ = (actTime_ + timeStep) % maxTime_;
@@ -45,8 +40,8 @@ SmallTown::Builder SmallTown::Builder::maxTime(const Time maxTime) {
     return *this;
 }
 
-SmallTown::Builder SmallTown::Builder::citizen(Citizen const &citizen) {
-    this->tempCitizens_.push_back(std::make_shared<Citizen>(citizen));
+SmallTown::Builder SmallTown::Builder::citizen(std::shared_ptr<Citizen> citizen) {
+    this->tempCitizens_.push_back(citizen);
     return *this;
 }
 

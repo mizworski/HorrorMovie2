@@ -10,7 +10,7 @@
 #include "monster.h"
 #include "smalltown.h"
 
-int main(int argc, const char * argv[]) {
+int main() {
 
 
     auto groupOfMonsters = createGroupOfMonsters({

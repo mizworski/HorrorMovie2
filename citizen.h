@@ -8,15 +8,13 @@ class Citizen : public virtual Living {
 public:
     Citizen(HealthPoints healthPoints, Age age) : healthPoints_(healthPoints),  age_(age) {}
 
-//    virtual ~Citizen() {}
-
     HealthPoints getHealth() const override;
 
-    const Age getAge() const;
+    Age getAge() const;
 
     void takeDamage(AttackPower damage) override;
 
-    virtual void fightAgainstMonsters(GroupOfMonsters monsters);
+    virtual void fightAgainstMonster(std::shared_ptr<Monster> monster);
 
 private:
     HealthPoints healthPoints_;
@@ -37,20 +35,20 @@ class Sheriff : public Citizen, public virtual Attacking {
 public:
     Sheriff(HealthPoints health, Age age, AttackPower attackPower);
 
-    const AttackPower getAttackPower() const override ;
+    AttackPower getAttackPower() const override ;
 
-    void fightAgainstMonsters(GroupOfMonsters monsters) ;
+    void fightAgainstMonster(std::shared_ptr<Monster> monster) override;
 
 private:
-    const void isAttackPowerValid(AttackPower attackPower) const;
+    void isAttackPowerValid(AttackPower attackPower) const;
 
     const AttackPower attackPower_;
 };
 
-Teenager createTeenager(HealthPoints health, Age age);
+std::shared_ptr<Teenager> createTeenager(HealthPoints health, Age age);
 
-Adult createAdult(HealthPoints health, Age age);
+std::shared_ptr<Adult> createAdult(HealthPoints health, Age age);
 
-Sheriff createSheriff(HealthPoints health, Age age, AttackPower attackPower);
+std::shared_ptr<Sheriff> createSheriff(HealthPoints health, Age age, AttackPower attackPower);
 
 #endif //HORRORMOVIE2_CITIZEN_H

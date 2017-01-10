@@ -4,7 +4,7 @@ HealthPoints Citizen::getHealth() const {
     return healthPoints_;
 }
 
-const Age Citizen::getAge() const {
+Age Citizen::getAge() const {
     return age_;
 }
 
@@ -16,8 +16,8 @@ void Citizen::takeDamage(AttackPower damage) {
     }
 }
 
-void Citizen::fightAgainstMonsters(GroupOfMonsters monsters) {
-    takeDamage(monsters.getAttackPower());
+void Citizen::fightAgainstMonster(std::shared_ptr<Monster> monster) {
+    takeDamage(monster->getAttackPower());
 }
 
 Teenager::Teenager(HealthPoints health, Age age) : Citizen(health, age) {
@@ -34,29 +34,29 @@ Sheriff::Sheriff(HealthPoints health, Age age, AttackPower attackPower) : Citize
     isAttackPowerValid(attackPower);
 }
 
-const AttackPower Sheriff::getAttackPower() const {
+AttackPower Sheriff::getAttackPower() const {
     return attackPower_;
 }
 
-const void Sheriff::isAttackPowerValid(AttackPower attackPower) const {
+void Sheriff::isAttackPowerValid(AttackPower attackPower) const {
     assert(attackPower >= 0);
 }
 
-void Sheriff::fightAgainstMonsters(GroupOfMonsters monsters)  {
+void Sheriff::fightAgainstMonster(std::shared_ptr<Monster> monster)  {
     if (getHealth() > 0) {
-        takeDamage(monsters.getAttackPower());
-        monsters.takeDamage(getAttackPower());
+        takeDamage(monster->getAttackPower());
+        monster->takeDamage(getAttackPower());
     }
 }
 
-Teenager createTeenager(HealthPoints health, Age age) {
-    return Teenager(health, age);
+std::shared_ptr<Teenager> createTeenager(HealthPoints health, Age age) {
+    return std::make_shared<Teenager>(Teenager(health, age));
 }
 
-Adult createAdult(HealthPoints health, Age age) {
-    return Adult(health, age);
+std::shared_ptr<Adult> createAdult(HealthPoints health, Age age) {
+    return std::make_shared<Adult>(Adult(health, age));
 }
 
-Sheriff createSheriff(HealthPoints health, Age age, AttackPower attackPower) {
-    return Sheriff(health, age, attackPower);
+std::shared_ptr<Sheriff> createSheriff(HealthPoints health, Age age, AttackPower attackPower) {
+    return std::make_shared<Sheriff>(Sheriff(health, age, attackPower));
 }

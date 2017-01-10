@@ -18,7 +18,7 @@ public:
 
     void takeDamage(AttackPower damage) override;
 
-    const AttackPower getAttackPower() const override;
+    AttackPower getAttackPower() const override;
 
     const std::string getMonsterName() const override;
 
@@ -27,7 +27,7 @@ private:
     const AttackPower attackPower_;
     std::string monsterName_;
 
-    const void isAttackPowerValid(AttackPower attackPower) const;
+    void isAttackPowerValid(AttackPower attackPower) const;
 };
 
 class Zombie : public SingleMonster {
@@ -47,15 +47,15 @@ public :
 
 class GroupOfMonsters : public Monster {
 public:
-    GroupOfMonsters(std::vector<SingleMonster> monsters);
+    GroupOfMonsters(std::vector<std::shared_ptr<Monster>> monsters);
 
-    GroupOfMonsters(std::initializer_list<SingleMonster> monsters);
+    GroupOfMonsters(std::initializer_list<std::shared_ptr<Monster>> monsters);
 
     HealthPoints getHealth() const override;
 
     void takeDamage(AttackPower damage) override;
 
-    const AttackPower getAttackPower() const override;
+    AttackPower getAttackPower() const override;
 
     const std::string getMonsterName() const override;
 
@@ -64,12 +64,12 @@ private:
     std::string monsterName_;
 };
 
-Zombie createZombie(HealthPoints health, AttackPower attackPower);
+std::shared_ptr<Zombie> createZombie(HealthPoints health, AttackPower attackPower);
 
-Vampire createVampire(HealthPoints health, AttackPower attackPower);
+std::shared_ptr<Vampire> createVampire(HealthPoints health, AttackPower attackPower);
 
-Mummy createMummy(HealthPoints health, AttackPower attackPower);
+std::shared_ptr<Mummy> createMummy(HealthPoints health, AttackPower attackPower);
 
-GroupOfMonsters createGroupOfMonsters(std::vector<SingleMonster> monsters);
+GroupOfMonsters createGroupOfMonsters(std::vector<std::shared_ptr<Monster>> monsters);
 
 #endif //HORRORMOVIE2_MONSTER_H

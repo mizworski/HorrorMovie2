@@ -23,7 +23,7 @@ private:
     Time maxTime_; // czas maksymalny
     GroupOfMonsters monsters_;
 
-    std::vector<std::shared_ptr<Citizen>> citizens_; // should be a vector
+    std::vector<std::shared_ptr<Citizen>> citizens_;
 };
 
 class SmallTown::Builder {
@@ -36,7 +36,7 @@ public:
 
     Builder maxTime(const Time c);
 
-    Builder citizen(Citizen const &citizen);
+    Builder citizen(std::shared_ptr<Citizen> citizen);
 
     SmallTown build();
 
