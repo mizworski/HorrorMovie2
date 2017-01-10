@@ -13,7 +13,7 @@ void SmallTown::tick(Time timeStep) {
             }
         }
 
-        actTime_ = (actTime_ + timeStep) % maxTime_;
+        actTime_ = (actTime_ + timeStep) % (maxTime_ + 1);
     }
 }
 

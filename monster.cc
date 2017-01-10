@@ -4,7 +4,9 @@ SingleMonster::SingleMonster(HealthPoints healthPoints,
                              AttackPower attackPower,
                              std::string monsterName) : healthPoints_(healthPoints),
                                                         attackPower_(attackPower),
-                                                        monsterName_(monsterName) {}
+                                                        monsterName_(monsterName) {
+    isAttackPowerValid(attackPower);
+}
 
 HealthPoints SingleMonster::getHealth() const {
     return healthPoints_;
