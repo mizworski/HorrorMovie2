@@ -7,7 +7,6 @@
 //
 
 #include "citizen.h"
-#include "monster.h"
 #include "smalltown.h"
 
 int main() {
@@ -30,11 +29,11 @@ int main() {
     smallTown.tick(18);
     smallTown.tick(3);
 
-//
-//    auto status = smallTown.getStatus();
-//    assert(status.getMonsterName() == "GroupOfMonsters");
-//    assert(status.getMonsterHealth() == 80);
-//    assert(status.getAliveCitizens() == 3);
+
+    auto status_ = smallTown.getStatus();
+    assert(status_.getMonsterName() == "GroupOfMonsters");
+    assert(status_.getMonsterHealth() == 80);
+    assert(status_.getAliveCitizens() == 3);
 
 
     return 0;

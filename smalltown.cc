@@ -25,6 +25,10 @@ bool SmallTown::isAttackingTime() {
     return true;
 }
 
+Status SmallTown::getStatus() const {
+    return status_;
+}
+
 SmallTown::Builder SmallTown::Builder::monster(GroupOfMonsters const &groupOfMonsters) {
     this->groupOfMonsters = groupOfMonsters;
     return *this;
@@ -50,3 +54,19 @@ SmallTown SmallTown::Builder::build() {
 }
 
 SmallTown::Builder::Builder() : groupOfMonsters({}) {}
+
+void Status::updateStatus() {
+
+}
+
+std::string Status::getMonsterName() const {
+    return "";
+}
+
+HealthPoints Status::getMonsterHealth() const {
+    return 0;
+}
+
+int Status::getAliveCitizens() const {
+    return 0;
+}

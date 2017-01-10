@@ -6,6 +6,19 @@
 
 typedef int Time;
 
+class Status {
+public:
+    std::string getMonsterName() const;
+
+    HealthPoints getMonsterHealth() const;
+
+    int getAliveCitizens() const;
+
+    void updateStatus();
+
+private:
+};
+
 class SmallTown {
 public:
     class Builder;
@@ -14,10 +27,14 @@ public:
 
     void tick(Time timeStep);
 
+    Status getStatus() const;
+
 private:
     bool gameHasEnded();
 
     bool isAttackingTime();
+
+    Status status_;
 
     Time actTime_; // czas startowy
     Time maxTime_; // czas maksymalny
