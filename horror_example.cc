@@ -12,6 +12,7 @@
 
 int main(int argc, const char * argv[]) {
 
+
     auto groupOfMonsters = createGroupOfMonsters({
         createMummy(90, 1),
         createZombie(20, 1),
@@ -26,8 +27,9 @@ int main(int argc, const char * argv[]) {
         .citizen(createTeenager(50, 14))
         .build();
 
-//    smallTown.tick(18);
-//    smallTown.tick(3);
+    smallTown.tick(18);
+    smallTown.tick(3);
+
 //
 //    auto status = smallTown.getStatus();
 //    assert(status.getMonsterName() == "GroupOfMonsters");

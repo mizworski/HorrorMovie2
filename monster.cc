@@ -1,103 +1,97 @@
 #include "monster.h"
 
-Monster::Monster(HealthPoints health, AttackPower attackPower) : health_(health),
-                                                                 attackPower_(attackPower) {} //todo virtual?
+SingleMonster::SingleMonster(HealthPoints healthPoints,
+                             AttackPower attackPower,
+                             std::string monsterName) : healthPoints_(healthPoints),
+                                                        attackPower_(attackPower),
+                                                        monsterName_(monsterName) {}
 
-HealthPoints Monster::getHealth() {
-    return health_;
+HealthPoints SingleMonster::getHealth() const {
+    return healthPoints_;
 }
 
-AttackPower Monster::getAttackPower() {
-    return attackPower_;
-}
-
-void Monster::takeDamage(AttackPower damage) {
-    if (damage >= health_) {
-        health_ = 0; //todo HealthPoints.zero() ?
+void SingleMonster::takeDamage(AttackPower damage) {
+    if (damage >= healthPoints_) {
+        healthPoints_ = 0;
     } else {
-        health_ -= damage;
+        healthPoints_ -= damage;
     }
 }
 
-Zombie::Zombie(HealthPoints health, AttackPower attackPower) : Monster(health, attackPower) {};
-
-Vampire::Vampire(HealthPoints health, AttackPower attackPower) : Monster(health, attackPower) {};
-
-Mummy::Mummy(HealthPoints health, AttackPower attackPower) : Monster(health, attackPower) {};
-
-/// Group of monsters.
-
-GroupOfMOnsters::GroupOfMOnsters() : health_(0), attackPower_(0) {};
-
-GroupOfMOnsters::GroupOfMOnsters(std::vector<Monster> monsters) : monsters_(monsters), health_(0),
-                                                                  attackPower_(0) {
-    for (auto &monster : monsters_) {
-        HealthPoints health = monster.getHealth();
-
-        if (health > 0) {
-            health_ += health;
-            attackPower_ += monster.getAttackPower();
-        }
-    }
-}
-
-GroupOfMOnsters::GroupOfMOnsters(std::initializer_list<Monster> monsters) : monsters_(monsters), health_(0),
-                                                                            attackPower_(0) {
-    for (auto &monster : monsters_) {
-        HealthPoints health = monster.getHealth();
-
-        if (health > 0) {
-            health_ += health;
-            attackPower_ += monster.getAttackPower();
-        }
-    }
-}
-
-HealthPoints GroupOfMOnsters::getHealth() {
-    return health_;
-}
-
-AttackPower GroupOfMOnsters::getAttackPower() {
+const AttackPower SingleMonster::getAttackPower() const {
     return attackPower_;
 }
 
-void GroupOfMOnsters::takeDamage(AttackPower damage) {
-    for (auto &monster : monsters_) {
-        if (monster.getHealth() > 0) {
-            HealthPoints health = monster.getHealth();
-
-            monster.takeDamage(damage);
-
-            if (damage >= health) {
-                health_ -= health;
-                attackPower_ -= monster.getAttackPower();
-            } else {
-                health_ -= damage;
-            }
-        }
-    }
+const std::string SingleMonster::getMonsterName() const {
+    return monsterName_;
 }
 
+const void SingleMonster::isAttackPowerValid(AttackPower attackPower) const {
+    assert(attackPower >= 0);
+}
+
+Zombie::Zombie(HealthPoints health, AttackPower attackPower) : SingleMonster(health, attackPower, "Zombie") {};
+
+Vampire::Vampire(HealthPoints health, AttackPower attackPower) : SingleMonster(health, attackPower, "Vampire") {};
+
+Mummy::Mummy(HealthPoints health, AttackPower attackPower) : SingleMonster(health, attackPower, "Mummy") {};
 
 Zombie createZombie(HealthPoints health, AttackPower attackPower) {
-    Zombie zombie(health, attackPower);
-    return zombie;
+    return Zombie(health, attackPower);
 }
 
 Vampire createVampire(HealthPoints health, AttackPower attackPower) {
-    Vampire vampire(health, attackPower);
-    return vampire;
+    return Vampire(health, attackPower);
 }
 
 Mummy createMummy(HealthPoints health, AttackPower attackPower) {
-    Mummy mummy(health, attackPower);
-    return mummy;
+    return Mummy(health, attackPower);
 }
 
-GroupOfMOnsters createGroupOfMonsters(std::vector<Monster> monsters) {
-    return GroupOfMOnsters(monsters);
+GroupOfMonsters::GroupOfMonsters(std::vector<SingleMonster> monsters) {
+    for (auto &monster : monsters) {
+        monsters_.push_back(std::make_shared<SingleMonster>(monster));
+    }
 }
 
-GroupOfMOnsters createGroupOfMonsters(std::initializer_list<Monster> monsters) {
-    return GroupOfMOnsters(monsters);
+GroupOfMonsters::GroupOfMonsters(std::initializer_list<SingleMonster> monsters) {
+    for (auto &monster : monsters) {
+        monsters_.push_back(std::make_shared<SingleMonster>(monster));
+    }
+}
+
+HealthPoints GroupOfMonsters::getHealth() const {
+    HealthPoints healthPoints = 0;
+
+    for (auto &monster : monsters_) {
+        healthPoints += monster->getHealth();
+    }
+
+    return healthPoints;
+}
+
+void GroupOfMonsters::takeDamage(AttackPower damage) {
+    for (auto &monster : monsters_) {
+        monster->takeDamage(damage);
+    }
+}
+
+const AttackPower GroupOfMonsters::getAttackPower() const {
+    AttackPower attackPower = 0;
+
+    for (auto &monster : monsters_) {
+        if (monster->getHealth() > 0) {
+            attackPower += monster->getAttackPower();
+        }
+    }
+
+    return attackPower;
+}
+
+const std::string GroupOfMonsters::getMonsterName() const {
+    return monsterName_;
+}
+
+GroupOfMonsters createGroupOfMonsters(std::vector<SingleMonster> monsters) {
+    return GroupOfMonsters(monsters);
 }

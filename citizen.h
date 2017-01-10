@@ -1,30 +1,26 @@
 #ifndef HORRORMOVIE2_CITIZEN_H
 #define HORRORMOVIE2_CITIZEN_H
 
-#include <cassert>
+#include "helper.h"
+#include "monster.h"
 
-typedef int HealthPoints;
-typedef int Age;
-typedef int AttackPower;
-
-class Citizen {
+class Citizen : public virtual Living {
 public:
-    Citizen(HealthPoints health, Age age) : health_(health), age_(age) {} //todo virtual?
+    Citizen(HealthPoints healthPoints, Age age) : healthPoints_(healthPoints),  age_(age) {}
 
-    HealthPoints getHealth();
+//    virtual ~Citizen() {}
 
-    Age getAge();
+    HealthPoints getHealth() const override;
 
-    void takeDamage(AttackPower damage);
+    const Age getAge() const;
 
-protected:
-    Age LOWER_BOUND_TEENAGER = 11;
-    Age UPPER_BOUND_TEENAGER = 17;
-    Age LOWER_BOUND_ADULT = 18;
-    Age UPPER_BOUND_ADULT = 100;
+    void takeDamage(AttackPower damage) override;
+
+    virtual void fightAgainstMonsters(GroupOfMonsters monsters);
+
 private:
-    HealthPoints health_; //todo change type
-    Age age_; //todo
+    HealthPoints healthPoints_;
+    const Age age_;
 };
 
 class Teenager : public Citizen {
@@ -37,14 +33,18 @@ public:
     Adult(HealthPoints health, Age age);
 };
 
-class Sheriff : public Citizen {
+class Sheriff : public Citizen, public virtual Attacking {
 public:
-    Sheriff(HealthPoints health, Age age, AttackPower attack_power);
+    Sheriff(HealthPoints health, Age age, AttackPower attackPower);
 
-    AttackPower getAttackPower();
+    const AttackPower getAttackPower() const override ;
+
+    void fightAgainstMonsters(GroupOfMonsters monsters) ;
 
 private:
-    AttackPower attackPower;
+    const void isAttackPowerValid(AttackPower attackPower) const;
+
+    const AttackPower attackPower_;
 };
 
 Teenager createTeenager(HealthPoints health, Age age);

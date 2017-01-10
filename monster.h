@@ -1,58 +1,67 @@
 #ifndef HORRORMOVIE2_MONSTER_H
 #define HORRORMOVIE2_MONSTER_H
 
-typedef int HealthPoints;
-typedef int Age;
-typedef int AttackPower;
-
 #include <vector>
+#include <string>
+#include "helper.h"
 
-class Monster {
+class Monster : public virtual Living, public virtual Attacking {
 public:
-    Monster(HealthPoints health, AttackPower attackPower);
-
-    HealthPoints getHealth();
-
-    AttackPower getAttackPower();
-
-    void takeDamage(AttackPower damage);
-
-private:
-    HealthPoints health_; //todo change type.
-    AttackPower attackPower_;
+    virtual const std::string getMonsterName() const = 0;
 };
 
-class Zombie : public Monster {
+class SingleMonster : public virtual Monster {
+public:
+    SingleMonster(HealthPoints health, AttackPower attackPower, std::string monsterName);
+
+    HealthPoints getHealth() const override;
+
+    void takeDamage(AttackPower damage) override;
+
+    const AttackPower getAttackPower() const override;
+
+    const std::string getMonsterName() const override;
+
+private:
+    HealthPoints healthPoints_;
+    const AttackPower attackPower_;
+    std::string monsterName_;
+
+    const void isAttackPowerValid(AttackPower attackPower) const;
+};
+
+class Zombie : public SingleMonster {
 public :
     Zombie(HealthPoints health, AttackPower attackPower);
 };
 
-class Vampire : public Monster {
+class Vampire : public SingleMonster {
 public :
     Vampire(HealthPoints health, AttackPower attackPower);
 };
 
-class Mummy : public Monster {
+class Mummy : public SingleMonster {
 public :
     Mummy(HealthPoints health, AttackPower attackPower);
 };
 
-class GroupOfMOnsters {
+class GroupOfMonsters : public Monster {
 public:
-    GroupOfMOnsters();
-    GroupOfMOnsters(std::vector<Monster> monsters);
-    GroupOfMOnsters(std::initializer_list<Monster> monsters);
+    GroupOfMonsters(std::vector<SingleMonster> monsters);
 
-    HealthPoints getHealth();
+    GroupOfMonsters(std::initializer_list<SingleMonster> monsters);
 
-    AttackPower getAttackPower();
+    HealthPoints getHealth() const override;
 
-    void takeDamage(AttackPower damage);
+    void takeDamage(AttackPower damage) override;
+
+    const AttackPower getAttackPower() const override;
+
+    const std::string getMonsterName() const override;
 
 private:
-    std::vector<Monster> monsters_;
-    HealthPoints health_; //todo change type
-    AttackPower attackPower_;
+    std::vector<std::shared_ptr<Monster>> monsters_;
+    std::string monsterName_;
 };
 
 Zombie createZombie(HealthPoints health, AttackPower attackPower);
@@ -61,8 +70,6 @@ Vampire createVampire(HealthPoints health, AttackPower attackPower);
 
 Mummy createMummy(HealthPoints health, AttackPower attackPower);
 
-GroupOfMOnsters createGroupOfMonsters(std::vector<Monster> monsters);
-
-GroupOfMOnsters createGroupOfMonsters(std::initializer_list<Monster> monsters);
+GroupOfMonsters createGroupOfMonsters(std::vector<SingleMonster> monsters);
 
 #endif //HORRORMOVIE2_MONSTER_H
