@@ -38,9 +38,11 @@ Vampire::Vampire(HealthPoints health, AttackPower attackPower) : SingleMonster(h
 
 Mummy::Mummy(HealthPoints health, AttackPower attackPower) : SingleMonster(health, attackPower, "Mummy") {};
 
-GroupOfMonsters::GroupOfMonsters(std::vector<std::shared_ptr<Monster>> monsters) : monsters_(monsters) {};
+GroupOfMonsters::GroupOfMonsters(std::vector<std::shared_ptr<Monster>> monsters) : monsters_(monsters),
+                                                                                   monsterName_("GroupOfMonsters") {};
 
-GroupOfMonsters::GroupOfMonsters(std::initializer_list<std::shared_ptr<Monster>> monsters) : monsters_(monsters) {};
+GroupOfMonsters::GroupOfMonsters(std::initializer_list<std::shared_ptr<Monster>> monsters) : monsters_(monsters),
+                                                                                             monsterName_("GroupOfMonsters") {};
 
 HealthPoints GroupOfMonsters::getHealth() const {
     HealthPoints healthPoints = 0;

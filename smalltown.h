@@ -8,15 +8,18 @@ typedef int Time;
 
 class Status {
 public:
+    Status(std::string monsterName, HealthPoints monsterHealth, int aliveCitizens);
+
     std::string getMonsterName() const;
 
     HealthPoints getMonsterHealth() const;
 
     int getAliveCitizens() const;
 
-    void updateStatus();
-
 private:
+    std::string monsterName_;
+    HealthPoints monsterHealth_;
+    int aliveCitizens_;
 };
 
 class Clock {
@@ -50,9 +53,10 @@ public:
     Status getStatus() const;
 
 private:
-    bool gameHasEnded();
+    bool gameHasEnded() const;
 
-    Status status_;
+    int countCitizens() const;
+
     MyClock clock_;
 
     std::shared_ptr<Monster> monster_;

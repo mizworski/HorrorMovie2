@@ -17,7 +17,11 @@ void SmallTown::tick(Time timeStep) {
     }
 }
 
-bool SmallTown::gameHasEnded() {
+Status SmallTown::getStatus() const {
+    return Status(this->monster_->getMonsterName(), this->monster_->getHealth(), countCitizens());
+}
+
+bool SmallTown::gameHasEnded() const {
     HealthPoints monstersHealth = monster_->getHealth();
     HealthPoints citizensHealth = 0;
 
@@ -39,8 +43,16 @@ bool SmallTown::gameHasEnded() {
     }
 }
 
-Status SmallTown::getStatus() const {
-    return status_;
+int SmallTown::countCitizens() const {
+    int citizensAlive = 0;
+
+    for (auto &citizen : citizens_) {
+        if (citizen->getHealth() > 0) {
+            ++citizensAlive;
+        }
+    }
+
+    return citizensAlive;
 }
 
 SmallTown::Builder SmallTown::Builder::monster(std::shared_ptr<Monster> monster) {
@@ -69,20 +81,22 @@ SmallTown SmallTown::Builder::build() {
 
 SmallTown::Builder::Builder() {}
 
-void Status::updateStatus() {
-
-}
+Status::Status(std::string monsterName,
+               HealthPoints monsterHealth,
+               int aliveCitizens) : monsterName_(monsterName),
+                                    monsterHealth_(monsterHealth),
+                                    aliveCitizens_(aliveCitizens) {}
 
 std::string Status::getMonsterName() const {
-    return "";
+    return monsterName_;
 }
 
 HealthPoints Status::getMonsterHealth() const {
-    return 0;
+    return monsterHealth_;
 }
 
 int Status::getAliveCitizens() const {
-    return 0;
+    return aliveCitizens_;
 }
 
 MyClock::MyClock(Time startTime, Time endTime) : actTime_(startTime), endTime_(endTime) {}
@@ -92,5 +106,5 @@ void MyClock::increaseTime(Time timeStep) {
 }
 
 bool MyClock::isAttackingTime() {
-    return (actTime_ % 3 == 0 || actTime_% 13 == 0) && actTime_% 7 != 0;
+    return (actTime_ % 3 == 0 || actTime_ % 13 == 0) && actTime_ % 7 != 0;
 }
