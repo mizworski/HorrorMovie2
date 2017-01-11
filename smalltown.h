@@ -19,11 +19,31 @@ public:
 private:
 };
 
+class Clock {
+public:
+    virtual void increaseTime(Time timeStamp) = 0;
+
+    virtual bool isAttackingTime() = 0;
+};
+
+class MyClock : public Clock {
+public:
+    MyClock(Time startTime, Time endTime);
+
+    void increaseTime(Time timeStep) override;
+
+    bool isAttackingTime() override;
+
+private:
+    Time actTime_;
+    Time endTime_;
+};
+
 class SmallTown {
 public:
     class Builder;
 
-    SmallTown(Time t0, Time t1, GroupOfMonsters &groupOfMonsters, std::vector<std::shared_ptr<Citizen>> &citizens);
+    SmallTown(Time t0, Time t1, std::shared_ptr<Monster> monster, std::vector<std::shared_ptr<Citizen>> &citizens);
 
     void tick(Time timeStep);
 
@@ -32,13 +52,10 @@ public:
 private:
     bool gameHasEnded();
 
-    bool isAttackingTime();
-
     Status status_;
+    MyClock clock_;
 
-    Time actTime_; // czas startowy
-    Time maxTime_; // czas maksymalny
-    GroupOfMonsters monsters_;
+    std::shared_ptr<Monster> monster_;
 
     std::vector<std::shared_ptr<Citizen>> citizens_;
 };
@@ -47,7 +64,7 @@ class SmallTown::Builder {
 public:
     Builder();
 
-    Builder monster(GroupOfMonsters const &groupOfMonsters);
+    Builder monster(std::shared_ptr<Monster> monster);
 
     Builder startTime(const Time actTime);
 
@@ -59,10 +76,10 @@ public:
 
 private:
     // variables needed for construction of object of Product class
-    Time t0; // czas startowy
-    Time t1; // czas maksymalny
+    Time t0_; // czas startowy
+    Time t1_; // czas maksymalny
     std::vector<std::shared_ptr<Citizen>> tempCitizens_; // should be a vector
-    GroupOfMonsters groupOfMonsters;
+    std::shared_ptr<Monster> monster_;
 };
 
 #endif //HORRORMOVIE2_SMALLTOWN_H

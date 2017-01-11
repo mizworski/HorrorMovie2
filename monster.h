@@ -70,6 +70,6 @@ std::shared_ptr<Vampire> createVampire(HealthPoints health, AttackPower attackPo
 
 std::shared_ptr<Mummy> createMummy(HealthPoints health, AttackPower attackPower);
 
-GroupOfMonsters createGroupOfMonsters(std::vector<std::shared_ptr<Monster>> monsters);
+std::shared_ptr<GroupOfMonsters> createGroupOfMonsters(std::vector<std::shared_ptr<Monster>> monsters);
 
 #endif //HORRORMOVIE2_MONSTER_H

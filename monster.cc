@@ -86,6 +86,6 @@ std::shared_ptr<Mummy> createMummy(HealthPoints health, AttackPower attackPower)
     return std::make_shared<Mummy>(Mummy(health, attackPower));
 }
 
-GroupOfMonsters createGroupOfMonsters(std::vector<std::shared_ptr<Monster>> monsters) {
-    return GroupOfMonsters(monsters);
+std::shared_ptr<GroupOfMonsters> createGroupOfMonsters(std::vector<std::shared_ptr<Monster>> monsters) {
+    return std::make_shared<GroupOfMonsters>(GroupOfMonsters(monsters));
 }
