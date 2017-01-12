@@ -3,8 +3,9 @@
 
 
 SmallTown::SmallTown(Time t0, Time t1, std::shared_ptr<Monster> monster,
-                     std::vector<std::shared_ptr<Citizen>> &citizens) :
-        clock_(t0, t1), monster_(monster), citizens_(citizens) {}
+                     std::vector<std::shared_ptr<Citizen>> &citizens,
+                     std::shared_ptr<Strategy> strategy) :
+        clock_(t0, t1,strategy), monster_(monster), citizens_(citizens) {}
 
 void SmallTown::tick(Time timeStep) {
     if (!gameHasEnded()) {
@@ -60,6 +61,11 @@ SmallTown::Builder SmallTown::Builder::monster(std::shared_ptr<Monster> monster)
     return *this;
 }
 
+SmallTown::Builder SmallTown::Builder::strategy(std::shared_ptr<Strategy> strategy) {
+    this->strategy_ = strategy;
+    return *this;
+}
+
 SmallTown::Builder SmallTown::Builder::startTime(const Time actTime) {
     this->t0_ = actTime;
     return *this;
@@ -76,7 +82,7 @@ SmallTown::Builder SmallTown::Builder::citizen(std::shared_ptr<Citizen> citizen)
 }
 
 SmallTown SmallTown::Builder::build() {
-    return SmallTown(this->t0_, this->t1_, this->monster_, this->tempCitizens_);
+    return SmallTown(this->t0_, this->t1_, this->monster_, this->tempCitizens_,this->strategy_);
 }
 
 SmallTown::Builder::Builder() {}
@@ -99,12 +105,12 @@ int Status::getAliveCitizens() const {
     return aliveCitizens_;
 }
 
-MyClock::MyClock(Time startTime, Time endTime) : actTime_(startTime), endTime_(endTime) {}
+MyClock::MyClock(Time startTime, Time endTime,std::shared_ptr<Strategy> strategy) : actTime_(startTime), endTime_(endTime),strategy_(strategy) {}
 
 void MyClock::increaseTime(Time timeStep) {
     actTime_ = (actTime_ + timeStep) % (endTime_ + 1);
 }
 
 bool MyClock::isAttackingTime() {
-    return (actTime_ % 3 == 0 || actTime_ % 13 == 0) && actTime_ % 7 != 0;
+    return this->strategy_.get()->isAttackingTime(actTime_);
 }
